@@ -1,4 +1,4 @@
-SQL (Structured Query Language) - язык программирования для взаимодействия с реляционными базами данных (Прим. [[Postgres - Index]])
+SQL (Structured Query Language) - язык программирования для взаимодействия с реляционными базами данных (Прим. [[Postgres - Index|Postgres]])
 
 ---
 ## 1. Мой план изучения - [[SQL - Roadmap]]
