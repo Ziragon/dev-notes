@@ -1,1 +1,0 @@
-SSL (Secure Sockets Layer)
