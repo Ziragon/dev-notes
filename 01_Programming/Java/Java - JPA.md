@@ -1,4 +1,4 @@
-JPA ([[Java - Index|Java]] Persistence API) - спецификация (набор правил, интерфейсов и аннотаций), которая описывает, как Java-объекты должны сохраняться в [[СУБД - INDEX|реляционную базу данных]] и подгружаться из нее.
+JPA ([[Java - Index|Java]] Persistence API или пакет `jakarta.persistence`) - спецификация (набор правил, интерфейсов и аннотаций), которая описывает, как Java-объекты должны сохраняться в [[СУБД - INDEX|реляционную базу данных]] и подгружаться из нее.
 
 Основная задача JPA - реализовать концепцию [[ORM - Object-Relational Mapping|ORM]]. Она решает проблему несоответствия между классами в Java и табличной структурой [[SQL - Index|SQL]].
 
@@ -21,23 +21,46 @@ JPA ([[Java - Index|Java]] Persistence API) - спецификация (набо
 	schema = "my_schema",
 	uniqueConstraints = { 
 		@UniqueConstraint( 
-			name = "unique_key", 
-			columnNames = {"id", "name"} 
+			name = "ek_email_username", 
+			columnNames = {"email", "name"} 
 		) 
 	},
 	indexes = { 
 		@Index(name = "idx_name", columnList = "name")
 )
-public class Class {
-	private final Long id;
-	private final String name;
+public class User {
+	private Long id;
+	private String name;
+	private String email;
+	public User() {}
 }
 ```
 
 ---
-## 2. Первичный ключ и маппинг полей
+## 2. Первичный ключ
 
-1. **Первичный ключ**:
-	- **`@Id`**: помечает поле как первичный ключ
-	- `@GeneratedValue:` стратегия, описывающая поведение базы данных при генерации ID, через параметр `strategy =`:
-		- `GenerationType.IDENTITY`: инкремент
+- **`@Id`**: помечает поле как первичный ключ
+- `@GeneratedValue:` стратегия, описывающая поведение базы данных при генерации ID, через параметр `strategy =`:
+	- `GenerationType.IDENTITY`: базовое инкрементирование ID
+	- `GenerationType.SEQUENCE`: создание специальной сущности БД  - Sequence, из которой JPA может сразу взять батч айдишников 
+	- `GenerationType.UUID`: генерация UUID в качестве ID сущности
+	- `GenerationType.TABLE`: создание отдельной служебной таблицы, в которой хранится текущее значение последнего ID. При каждом сохранении сущности JPA блокирует строку, обновляет значение и использует его
+	- `GenerationType.AUTO`: JPA сама выбирает стратегию на основе используемой СУБД
+
+> [!IMPORTANT] Вывод: из вышеперечисленных стратегий лучшими будут SEQUENCE и UUID. IDENTITY может вызвать проблемы с производительностью при пакетных вставках, TABLE из-за блокировок является самым медленным способом, а AUTO может быть непредсказуемой - очень большой риск получить общую SEQUENCE для всех таблиц
+
+**Пример использования**:
+```java
+@Entity
+public class User {
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+}
+```
+
+---
+## 3. Маппинг полей
+
+- **`@Column`**: необязательный параметр для объявления колонны в таблице. Параметры:
+	- 
