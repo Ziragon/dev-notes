@@ -67,4 +67,13 @@ public class User {
 	- `unique`: задает `uniqueConstraint` из одного поля (уникальность значения) (def. false)
 	- `nullable`: задает `nullable` колонке (def. true)
 	- `insertable` и `updatable`: указывает, можно ли вставить или изменить поле (def. true). Полезно для полей типа `created_at`
-	- 
+	- `columnDefinition`: позволяет написать чистый SQL-фрагмент, который будет вставлен при создании колонки
+	- `options`:
+	- `table`: 
+	- `length`: длина строки (varchar или varbinary)
+	- `precision` и `scale`: работа с дробными числами (decimal или numeric)
+		- `precision`: общее количество цифр в числе
+		- `scale`: количество цифр после запятой
+	- `secondPrecision`: 
+	- `check`: 
+	- `comment`: 
